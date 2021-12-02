@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
-
-public class PoseChange1 : MonoBehaviour
+public class LoopPose : MonoBehaviour
 {
     private GameObject getRobot;
     public GameObject[] robotJoints;
     public ArticulationBody[] articulation;
 
-    private int motionOrder = 0;
+    private int motionOrder = 1;
 
     private float baseRotation;
     private float shoudlerRotation;
@@ -19,6 +19,8 @@ public class PoseChange1 : MonoBehaviour
     private float handRotation;
 
     float rotationSpeed = 40f;
+    int limit = 150;
+    int counter = 0;
 
 
     void Start()
@@ -29,30 +31,46 @@ public class PoseChange1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        LoopingPose();
         if (motionOrder == 1)
         {
-            movement_Up1();
+            movement_Pose1();
         }
         if (motionOrder == 2)
         {
-            movement_Up2();
+            movement_Pose2();
         }
         if (motionOrder == 3)
         {
-            movement_Up3();
+            movement_Pose3();
         }
         if (motionOrder == 4)
         {
-            movement_Down1();
+            movement_Pose4();
         }
         if (motionOrder == 5)
         {
-            movement_Down2();
+            movement_Pose5();
         }
         if (motionOrder == 6)
         {
-            movement_Center();
+            movement_Pose6();
         }
+    }
+
+    void LoopingPose()
+    {
+        if(counter > limit)
+        {
+            motionOrder += 1;
+            counter = 0;
+        }
+        if(motionOrder > 6)
+        {
+            motionOrder = 1;
+            counter = counter - 80;
+        }
+        counter++;
     }
 
     void initializeJoints()
@@ -99,67 +117,35 @@ public class PoseChange1 : MonoBehaviour
 
 
 
-    public void rotateMotion_up1()
-    {
-
-        motionOrder = 1;
-
-    }
-    public void rotateMotion_up2()
-    {
-        motionOrder = 2;
-
-    }
-    public void rotateMotion_up3()
-    {
-        motionOrder = 3;
-
-    }
-    public void rotateMotion_down1()
-    {
-        motionOrder = 4;
-
-    }
-    public void rotateMotion_down2()
-    {
-        motionOrder = 5;
-
-    }
-    public void rotateMotion_center()
-    {
-        motionOrder = 6;
-    }
-
-
-    void movement_Up1()
+    void movement_Pose1()
     {
         var baseDrive = articulation[0].xDrive;
         var shoudlerDrive = articulation[1].xDrive;
         var elbowDrive = articulation[2].xDrive;
         var wrist01Drive = articulation[3].xDrive;
         var wrist02Drive = articulation[4].xDrive;
-        if (articulation[0].xDrive.target != -62.98f)
+        if (articulation[0].xDrive.target != 62.98f)
         {
-            if (articulation[0].xDrive.target > -62.98f)
+            if (articulation[0].xDrive.target > 62.98f)
             {
                 baseRotation -= Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target < -62.98f)
+                if (articulation[0].xDrive.target < 62.98f)
                 {
-                    baseRotation = -62.98f;
+                    baseRotation = 62.98f;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
             }
-            if (articulation[0].xDrive.target < -62.98f)
+            if (articulation[0].xDrive.target < 62.98f)
             {
                 baseRotation += Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target > -62.98f)
+                if (articulation[0].xDrive.target > 62.98f)
                 {
-                    baseRotation = -62.98f;
+                    baseRotation = 62.98f;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
@@ -219,231 +205,198 @@ public class PoseChange1 : MonoBehaviour
                 }
             }
         }
-        if (articulation[3].xDrive.target != 40)
+        if (articulation[3].xDrive.target != 10.65f)
         {
-            if (articulation[3].xDrive.target > 40)
+            if (articulation[3].xDrive.target > 10.65f)
             {
                 wrist01Rotation -= Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target < 40)
+                if (articulation[3].xDrive.target < 10.65f)
                 {
-                    wrist01Rotation = 40;
+                    wrist01Rotation = 10.65f;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
-            if (articulation[3].xDrive.target < 40)
+            if (articulation[3].xDrive.target < 10.65f)
             {
                 wrist01Rotation += Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target > 40)
+                if (articulation[3].xDrive.target > 10.65f)
                 {
-                    wrist01Rotation = 40;
+                    wrist01Rotation = 10.65f;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
         }
-        if (articulation[4].xDrive.target != 78.67f)
+        if (articulation[4].xDrive.target != -78.67f)
         {
-            if (articulation[4].xDrive.target > 78.67f)
+            if (articulation[4].xDrive.target > -78.67f)
             {
                 wrist02Rotation -= Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target < 78.67f)
+                if (articulation[4].xDrive.target < -78.67f)
                 {
-                    wrist02Rotation = 78.67f;
+                    wrist02Rotation = -78.67f;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
             }
-            if (articulation[4].xDrive.target < 78.67f)
+            if (articulation[4].xDrive.target < -78.67f)
             {
                 wrist02Rotation += Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target > 78.67f)
+                if (articulation[4].xDrive.target > -78.67f)
                 {
-                    wrist02Rotation = 78.67f;
+                    wrist02Rotation = -78.67f;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
             }
         }
     }
-    void movement_Up2()
-    {
-
-        var baseDrive = articulation[0].xDrive;
-        if (articulation[0].xDrive.target != 20)
-        {
-            if (articulation[0].xDrive.target > 20)
-            {
-                baseRotation -= Time.deltaTime * rotationSpeed;
-                baseDrive.target = baseRotation;
-                articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target < 20)
-                {
-                    baseRotation = 20;
-                    baseDrive.target = baseRotation;
-                    articulation[0].xDrive = baseDrive;
-                }
-            }
-            if (articulation[0].xDrive.target < 20)
-            {
-                baseRotation += Time.deltaTime * rotationSpeed;
-                baseDrive.target = baseRotation;
-                articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target > 20)
-                {
-                    baseRotation = 20;
-                    baseDrive.target = baseRotation;
-                    articulation[0].xDrive = baseDrive;
-                }
-            }
-        }
-    }
-
-    void movement_Up3()
+    void movement_Pose2()
     {
         var baseDrive = articulation[0].xDrive;
         var shoudlerDrive = articulation[1].xDrive;
         var elbowDrive = articulation[2].xDrive;
         var wrist01Drive = articulation[3].xDrive;
         var wrist02Drive = articulation[4].xDrive;
-        if (articulation[0].xDrive.target != -45)
+        if (articulation[0].xDrive.target != 40)
         {
-            if (articulation[0].xDrive.target > -45)
+            if (articulation[0].xDrive.target > 40)
             {
                 baseRotation -= Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target < -45)
+                if (articulation[0].xDrive.target < 40)
                 {
-                    baseRotation = -45;
+                    baseRotation = 40;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
             }
-            if (articulation[0].xDrive.target < -45)
+            if (articulation[0].xDrive.target < 40)
             {
                 baseRotation += Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target > -45)
+                if (articulation[0].xDrive.target > 40)
                 {
-                    baseRotation = -45;
+                    baseRotation = 40;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
             }
         }
-        if (articulation[1].xDrive.target != 0)
+        if (articulation[1].xDrive.target != -20)
         {
-            if (articulation[1].xDrive.target > 0)
+            if (articulation[1].xDrive.target > -20)
             {
                 shoudlerRotation -= Time.deltaTime * rotationSpeed;
                 shoudlerDrive.target = shoudlerRotation;
                 articulation[1].xDrive = shoudlerDrive;
-                if (articulation[1].xDrive.target < 0)
+                if (articulation[1].xDrive.target < -20)
                 {
-                    shoudlerRotation = 0;
+                    shoudlerRotation = -20;
                     shoudlerDrive.target = shoudlerRotation;
                     articulation[1].xDrive = shoudlerDrive;
                 }
             }
-            if (articulation[1].xDrive.target < 0)
+            if (articulation[1].xDrive.target < -20)
             {
                 shoudlerRotation += Time.deltaTime * rotationSpeed;
                 shoudlerDrive.target = shoudlerRotation;
                 articulation[1].xDrive = shoudlerDrive;
-                if (articulation[1].xDrive.target > 0)
+                if (articulation[1].xDrive.target > -20)
                 {
-                    shoudlerRotation = 0;
+                    shoudlerRotation = -20;
                     shoudlerDrive.target = shoudlerRotation;
                     articulation[1].xDrive = shoudlerDrive;
                 }
             }
         }
-        if (articulation[2].xDrive.target != -120)
+        if (articulation[2].xDrive.target != -80)
         {
-            if (articulation[2].xDrive.target > -120)
+            if (articulation[2].xDrive.target > -80)
             {
                 elbowRotation -= Time.deltaTime * rotationSpeed;
                 elbowDrive.target = elbowRotation;
                 articulation[2].xDrive = elbowDrive;
-                if (articulation[2].xDrive.target < -120)
+                if (articulation[2].xDrive.target < -80)
                 {
-                    elbowRotation = -120;
+                    elbowRotation = -80;
                     elbowDrive.target = elbowRotation;
                     articulation[2].xDrive = elbowDrive;
                 }
             }
-            if (articulation[2].xDrive.target < -120)
+            if (articulation[2].xDrive.target < -80)
             {
                 elbowRotation += Time.deltaTime * rotationSpeed;
                 elbowDrive.target = elbowRotation;
                 articulation[2].xDrive = elbowDrive;
-                if (articulation[2].xDrive.target > -120)
+                if (articulation[2].xDrive.target > -80)
                 {
-                    elbowRotation = -120;
+                    elbowRotation = -80;
                     elbowDrive.target = elbowRotation;
                     articulation[2].xDrive = elbowDrive;
                 }
             }
         }
-        if (articulation[3].xDrive.target != 40)
+        if (articulation[3].xDrive.target != 30)
         {
-            if (articulation[3].xDrive.target > 40)
+            if (articulation[3].xDrive.target > 30)
             {
                 wrist01Rotation -= Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target < 40)
+                if (articulation[3].xDrive.target < 30)
                 {
-                    wrist01Rotation = 40;
+                    wrist01Rotation = 30;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
-            if (articulation[3].xDrive.target < 40)
+            if (articulation[3].xDrive.target < 30)
             {
                 wrist01Rotation += Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target > 40)
+                if (articulation[3].xDrive.target > 30)
                 {
-                    wrist01Rotation = 40;
+                    wrist01Rotation = 30;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
         }
-        if (articulation[4].xDrive.target != 50)
+        if (articulation[4].xDrive.target != -90)
         {
-            if (articulation[4].xDrive.target > 50)
+            if (articulation[4].xDrive.target > -90)
             {
                 wrist02Rotation -= Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target < 50)
+                if (articulation[4].xDrive.target < -90)
                 {
-                    wrist02Rotation = 50;
+                    wrist02Rotation = -90;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
             }
-            if (articulation[4].xDrive.target < 50)
+            if (articulation[4].xDrive.target < -90)
             {
                 wrist02Rotation += Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target > 50)
+                if (articulation[4].xDrive.target > -90)
                 {
-                    wrist02Rotation = 50;
+                    wrist02Rotation = -90;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
@@ -451,35 +404,179 @@ public class PoseChange1 : MonoBehaviour
         }
     }
 
-    void movement_Down1()
+    void movement_Pose3()
     {
         var baseDrive = articulation[0].xDrive;
         var shoudlerDrive = articulation[1].xDrive;
         var elbowDrive = articulation[2].xDrive;
         var wrist01Drive = articulation[3].xDrive;
         var wrist02Drive = articulation[4].xDrive;
-        if (articulation[0].xDrive.target != -60)
+        if (articulation[0].xDrive.target != 80)
         {
-            if (articulation[0].xDrive.target > -60)
+            if (articulation[0].xDrive.target > 80)
             {
                 baseRotation -= Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target < -60)
+                if (articulation[0].xDrive.target < 80)
                 {
-                    baseRotation = -60;
+                    baseRotation = 80;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
             }
-            if (articulation[0].xDrive.target < -60)
+            if (articulation[0].xDrive.target < 80)
             {
                 baseRotation += Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target > -60)
+                if (articulation[0].xDrive.target > 80)
                 {
-                    baseRotation = -60;
+                    baseRotation = 80;
+                    baseDrive.target = baseRotation;
+                    articulation[0].xDrive = baseDrive;
+                }
+            }
+        }
+        if (articulation[1].xDrive.target != -10)
+        {
+            if (articulation[1].xDrive.target > -10)
+            {
+                shoudlerRotation -= Time.deltaTime * rotationSpeed;
+                shoudlerDrive.target = shoudlerRotation;
+                articulation[1].xDrive = shoudlerDrive;
+                if (articulation[1].xDrive.target < -10)
+                {
+                    shoudlerRotation = -10;
+                    shoudlerDrive.target = shoudlerRotation;
+                    articulation[1].xDrive = shoudlerDrive;
+                }
+            }
+            if (articulation[1].xDrive.target < -10)
+            {
+                shoudlerRotation += Time.deltaTime * rotationSpeed;
+                shoudlerDrive.target = shoudlerRotation;
+                articulation[1].xDrive = shoudlerDrive;
+                if (articulation[1].xDrive.target > -10)
+                {
+                    shoudlerRotation = -10;
+                    shoudlerDrive.target = shoudlerRotation;
+                    articulation[1].xDrive = shoudlerDrive;
+                }
+            }
+        }
+        if (articulation[2].xDrive.target != -110)
+        {
+            if (articulation[2].xDrive.target > -110)
+            {
+                elbowRotation -= Time.deltaTime * rotationSpeed;
+                elbowDrive.target = elbowRotation;
+                articulation[2].xDrive = elbowDrive;
+                if (articulation[2].xDrive.target < -110)
+                {
+                    elbowRotation = -110;
+                    elbowDrive.target = elbowRotation;
+                    articulation[2].xDrive = elbowDrive;
+                }
+            }
+            if (articulation[2].xDrive.target < -110)
+            {
+                elbowRotation += Time.deltaTime * rotationSpeed;
+                elbowDrive.target = elbowRotation;
+                articulation[2].xDrive = elbowDrive;
+                if (articulation[2].xDrive.target > -110)
+                {
+                    elbowRotation = -110;
+                    elbowDrive.target = elbowRotation;
+                    articulation[2].xDrive = elbowDrive;
+                }
+            }
+        }
+        if (articulation[3].xDrive.target != 30)
+        {
+            if (articulation[3].xDrive.target > 30)
+            {
+                wrist01Rotation -= Time.deltaTime * rotationSpeed;
+                wrist01Drive.target = wrist01Rotation;
+                articulation[3].xDrive = wrist01Drive;
+                if (articulation[3].xDrive.target < 30)
+                {
+                    wrist01Rotation = 30;
+                    wrist01Drive.target = wrist01Rotation;
+                    articulation[3].xDrive = wrist01Drive;
+                }
+            }
+            if (articulation[3].xDrive.target < 30)
+            {
+                wrist01Rotation += Time.deltaTime * rotationSpeed;
+                wrist01Drive.target = wrist01Rotation;
+                articulation[3].xDrive = wrist01Drive;
+                if (articulation[3].xDrive.target > 30)
+                {
+                    wrist01Rotation = 30;
+                    wrist01Drive.target = wrist01Rotation;
+                    articulation[3].xDrive = wrist01Drive;
+                }
+            }
+        }
+        if (articulation[4].xDrive.target != -90)
+        {
+            if (articulation[4].xDrive.target > -90)
+            {
+                wrist02Rotation -= Time.deltaTime * rotationSpeed;
+                wrist02Drive.target = wrist02Rotation;
+                articulation[4].xDrive = wrist02Drive;
+                if (articulation[4].xDrive.target < -90)
+                {
+                    wrist02Rotation = -90;
+                    wrist02Drive.target = wrist02Rotation;
+                    articulation[4].xDrive = wrist02Drive;
+                }
+            }
+            if (articulation[4].xDrive.target < -90)
+            {
+                wrist02Rotation += Time.deltaTime * rotationSpeed;
+                wrist02Drive.target = wrist02Rotation;
+                articulation[4].xDrive = wrist02Drive;
+                if (articulation[4].xDrive.target > -90)
+                {
+                    wrist02Rotation = -90;
+                    wrist02Drive.target = wrist02Rotation;
+                    articulation[4].xDrive = wrist02Drive;
+                }
+            }
+        }
+    }
+
+    void movement_Pose4()
+    {
+        var baseDrive = articulation[0].xDrive;
+        var shoudlerDrive = articulation[1].xDrive;
+        var elbowDrive = articulation[2].xDrive;
+        var wrist01Drive = articulation[3].xDrive;
+        var wrist02Drive = articulation[4].xDrive;
+        if (articulation[0].xDrive.target != 120)
+        {
+            if (articulation[0].xDrive.target > 120)
+            {
+                baseRotation -= Time.deltaTime * rotationSpeed;
+                baseDrive.target = baseRotation;
+                articulation[0].xDrive = baseDrive;
+                if (articulation[0].xDrive.target < 120)
+                {
+                    baseRotation = 120;
+                    baseDrive.target = baseRotation;
+                    articulation[0].xDrive = baseDrive;
+                }
+            }
+            if (articulation[0].xDrive.target < 120)
+            {
+                baseRotation += Time.deltaTime * rotationSpeed;
+                baseDrive.target = baseRotation;
+                articulation[0].xDrive = baseDrive;
+                if (articulation[0].xDrive.target > 120)
+                {
+                    baseRotation = 120;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
@@ -512,82 +609,82 @@ public class PoseChange1 : MonoBehaviour
                 }
             }
         }
-        if (articulation[2].xDrive.target != -145)
+        if (articulation[2].xDrive.target != -90)
         {
-            if (articulation[2].xDrive.target > -145)
+            if (articulation[2].xDrive.target > -90)
             {
                 elbowRotation -= Time.deltaTime * rotationSpeed;
                 elbowDrive.target = elbowRotation;
                 articulation[2].xDrive = elbowDrive;
-                if (articulation[2].xDrive.target < -145)
+                if (articulation[2].xDrive.target < -90)
                 {
-                    elbowRotation = -145;
+                    elbowRotation = -90;
                     elbowDrive.target = elbowRotation;
                     articulation[2].xDrive = elbowDrive;
                 }
             }
-            if (articulation[2].xDrive.target < -145)
+            if (articulation[2].xDrive.target < -90)
             {
                 elbowRotation += Time.deltaTime * rotationSpeed;
                 elbowDrive.target = elbowRotation;
                 articulation[2].xDrive = elbowDrive;
-                if (articulation[2].xDrive.target > -145)
+                if (articulation[2].xDrive.target > -90)
                 {
-                    elbowRotation = -145;
+                    elbowRotation = -90;
                     elbowDrive.target = elbowRotation;
                     articulation[2].xDrive = elbowDrive;
                 }
             }
         }
-        if (articulation[3].xDrive.target != 40)
+        if (articulation[3].xDrive.target != 50)
         {
-            if (articulation[3].xDrive.target > 40)
+            if (articulation[3].xDrive.target > 50)
             {
                 wrist01Rotation -= Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target < 40)
+                if (articulation[3].xDrive.target < 50)
                 {
-                    wrist01Rotation = 40;
+                    wrist01Rotation = 50;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
-            if (articulation[3].xDrive.target < 40)
+            if (articulation[3].xDrive.target < 50)
             {
                 wrist01Rotation += Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target > 40)
+                if (articulation[3].xDrive.target > 50)
                 {
-                    wrist01Rotation = 40;
+                    wrist01Rotation = 50;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
         }
-        if (articulation[4].xDrive.target != 75)
+        if (articulation[4].xDrive.target != -90)
         {
-            if (articulation[4].xDrive.target > 75)
+            if (articulation[4].xDrive.target > -90)
             {
                 wrist02Rotation -= Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target < 75)
+                if (articulation[4].xDrive.target < -90)
                 {
-                    wrist02Rotation = 75;
+                    wrist02Rotation = -90;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
             }
-            if (articulation[4].xDrive.target < 75)
+            if (articulation[4].xDrive.target < -90)
             {
                 wrist02Rotation += Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target > 75)
+                if (articulation[4].xDrive.target > -90)
                 {
-                    wrist02Rotation = 50;
+                    wrist02Rotation = -90;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
@@ -595,165 +692,290 @@ public class PoseChange1 : MonoBehaviour
         }
     }
 
-    void movement_Down2()
+    void movement_Pose5()
     {
         var baseDrive = articulation[0].xDrive;
         var shoudlerDrive = articulation[1].xDrive;
         var elbowDrive = articulation[2].xDrive;
         var wrist01Drive = articulation[3].xDrive;
         var wrist02Drive = articulation[4].xDrive;
-        if (articulation[0].xDrive.target != -70.23f)
+        if (articulation[0].xDrive.target != 160)
         {
-            if (articulation[0].xDrive.target > -70.23f)
+            if (articulation[0].xDrive.target > 220)
             {
                 baseRotation -= Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target < -70.23f)
+                if (articulation[0].xDrive.target < 220)
                 {
-                    baseRotation = -70.23f;
+                    baseRotation = 220;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
             }
-            if (articulation[0].xDrive.target < -70.23f)
+            if (articulation[0].xDrive.target < 220)
             {
                 baseRotation += Time.deltaTime * rotationSpeed;
                 baseDrive.target = baseRotation;
                 articulation[0].xDrive = baseDrive;
-                if (articulation[0].xDrive.target > -70.23f)
+                if (articulation[0].xDrive.target > 220)
                 {
-                    baseRotation = -70.23f;
+                    baseRotation = 220;
                     baseDrive.target = baseRotation;
                     articulation[0].xDrive = baseDrive;
                 }
             }
         }
-        if (articulation[1].xDrive.target != 24.48f)
+        if (articulation[1].xDrive.target != -20)
         {
-            if (articulation[1].xDrive.target > 24.48f)
+            if (articulation[1].xDrive.target > -20)
             {
                 shoudlerRotation -= Time.deltaTime * rotationSpeed;
                 shoudlerDrive.target = shoudlerRotation;
                 articulation[1].xDrive = shoudlerDrive;
-                if (articulation[1].xDrive.target < 24.48f)
+                if (articulation[1].xDrive.target < -20)
                 {
-                    shoudlerRotation = 24.48f;
+                    shoudlerRotation = -20;
                     shoudlerDrive.target = shoudlerRotation;
                     articulation[1].xDrive = shoudlerDrive;
                 }
             }
-            if (articulation[1].xDrive.target < 24.48f)
+            if (articulation[1].xDrive.target < -20)
             {
                 shoudlerRotation += Time.deltaTime * rotationSpeed;
                 shoudlerDrive.target = shoudlerRotation;
                 articulation[1].xDrive = shoudlerDrive;
-                if (articulation[1].xDrive.target > 24.48f)
+                if (articulation[1].xDrive.target > -20)
                 {
-                    shoudlerRotation = 24.48f;
+                    shoudlerRotation = -20;
                     shoudlerDrive.target = shoudlerRotation;
                     articulation[1].xDrive = shoudlerDrive;
                 }
             }
         }
-        if (articulation[2].xDrive.target != -130.71f)
+        if (articulation[2].xDrive.target != -100)
         {
-            if (articulation[2].xDrive.target > -130.71f)
+            if (articulation[2].xDrive.target > -100)
             {
                 elbowRotation -= Time.deltaTime * rotationSpeed;
                 elbowDrive.target = elbowRotation;
                 articulation[2].xDrive = elbowDrive;
-                if (articulation[2].xDrive.target < -130.71f)
+                if (articulation[2].xDrive.target < -100)
                 {
-                    elbowRotation = -130.71f;
+                    elbowRotation = -100;
                     elbowDrive.target = elbowRotation;
                     articulation[2].xDrive = elbowDrive;
                 }
             }
-            if (articulation[2].xDrive.target < -130.71f)
+            if (articulation[2].xDrive.target < -100)
             {
                 elbowRotation += Time.deltaTime * rotationSpeed;
                 elbowDrive.target = elbowRotation;
                 articulation[2].xDrive = elbowDrive;
-                if (articulation[2].xDrive.target > -130.71f)
+                if (articulation[2].xDrive.target > -100)
                 {
-                    elbowRotation = -130.71f;
+                    elbowRotation = -100;
                     elbowDrive.target = elbowRotation;
                     articulation[2].xDrive = elbowDrive;
                 }
             }
         }
-        if (articulation[3].xDrive.target != 19.4f)
+        if (articulation[3].xDrive.target != 30)
         {
-            if (articulation[3].xDrive.target > 19.4f)
+            if (articulation[3].xDrive.target > 30)
             {
                 wrist01Rotation -= Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target < 19.4f)
+                if (articulation[3].xDrive.target < 30)
                 {
-                    wrist01Rotation = 19.4f;
+                    wrist01Rotation = 30;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
-            if (articulation[3].xDrive.target < 19.4f)
+            if (articulation[3].xDrive.target < 30)
             {
                 wrist01Rotation += Time.deltaTime * rotationSpeed;
                 wrist01Drive.target = wrist01Rotation;
                 articulation[3].xDrive = wrist01Drive;
-                if (articulation[3].xDrive.target > 19.4f)
+                if (articulation[3].xDrive.target > 30)
                 {
-                    wrist01Rotation = 19.4f;
+                    wrist01Rotation = 30;
                     wrist01Drive.target = wrist01Rotation;
                     articulation[3].xDrive = wrist01Drive;
                 }
             }
         }
-        if (articulation[4].xDrive.target != 91.21f)
+        if (articulation[4].xDrive.target != -91.21f)
         {
-            if (articulation[4].xDrive.target > 91.21f)
+            if (articulation[4].xDrive.target > -91.21f)
             {
                 wrist02Rotation -= Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target < 91.21f)
+                if (articulation[4].xDrive.target < -91.21f)
                 {
-                    wrist02Rotation = 91.21f;
+                    wrist02Rotation = -91.21f;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
             }
-            if (articulation[4].xDrive.target < 91.21f)
+            if (articulation[4].xDrive.target < -91.21f)
             {
                 wrist02Rotation += Time.deltaTime * rotationSpeed;
                 wrist02Drive.target = wrist02Rotation;
                 articulation[4].xDrive = wrist02Drive;
-                if (articulation[4].xDrive.target > 91.21f)
+                if (articulation[4].xDrive.target > -91.21f)
                 {
-                    wrist02Rotation = 91.21f;
+                    wrist02Rotation = -91.21f;
                     wrist02Drive.target = wrist02Rotation;
                     articulation[4].xDrive = wrist02Drive;
                 }
             }
         }
     }
-    void movement_Center()
+    void movement_Pose6()
     {
-        StartCoroutine(waitMoving());
+        var baseDrive = articulation[0].xDrive;
+        var shoudlerDrive = articulation[1].xDrive;
+        var elbowDrive = articulation[2].xDrive;
+        var wrist01Drive = articulation[3].xDrive;
+        var wrist02Drive = articulation[4].xDrive;
+        if (articulation[0].xDrive.target != 270)
+        {
+            if (articulation[0].xDrive.target > 270)
+            {
+                baseRotation -= Time.deltaTime * rotationSpeed;
+                baseDrive.target = baseRotation;
+                articulation[0].xDrive = baseDrive;
+                if (articulation[0].xDrive.target < 270)
+                {
+                    baseRotation = 270;
+                    baseDrive.target = baseRotation;
+                    articulation[0].xDrive = baseDrive;
+                }
+            }
+            if (articulation[0].xDrive.target < 270)
+            {
+                baseRotation += Time.deltaTime * rotationSpeed;
+                baseDrive.target = baseRotation;
+                articulation[0].xDrive = baseDrive;
+                if (articulation[0].xDrive.target > 270)
+                {
+                    baseRotation = 270;
+                    baseDrive.target = baseRotation;
+                    articulation[0].xDrive = baseDrive;
+                }
+            }
+        }
+        if (articulation[1].xDrive.target != 30)
+        {
+            if (articulation[1].xDrive.target > 30)
+            {
+                shoudlerRotation -= Time.deltaTime * rotationSpeed;
+                shoudlerDrive.target = shoudlerRotation;
+                articulation[1].xDrive = shoudlerDrive;
+                if (articulation[1].xDrive.target < 30)
+                {
+                    shoudlerRotation = 30;
+                    shoudlerDrive.target = shoudlerRotation;
+                    articulation[1].xDrive = shoudlerDrive;
+                }
+            }
+            if (articulation[1].xDrive.target < 30)
+            {
+                shoudlerRotation += Time.deltaTime * rotationSpeed;
+                shoudlerDrive.target = shoudlerRotation;
+                articulation[1].xDrive = shoudlerDrive;
+                if (articulation[1].xDrive.target > 30)
+                {
+                    shoudlerRotation = 30;
+                    shoudlerDrive.target = shoudlerRotation;
+                    articulation[1].xDrive = shoudlerDrive;
+                }
+            }
+        }
+        if (articulation[2].xDrive.target != -100)
+        {
+            if (articulation[2].xDrive.target > -100)
+            {
+                elbowRotation -= Time.deltaTime * rotationSpeed;
+                elbowDrive.target = elbowRotation;
+                articulation[2].xDrive = elbowDrive;
+                if (articulation[2].xDrive.target < -100)
+                {
+                    elbowRotation = -100;
+                    elbowDrive.target = elbowRotation;
+                    articulation[2].xDrive = elbowDrive;
+                }
+            }
+            if (articulation[2].xDrive.target < -100)
+            {
+                elbowRotation += Time.deltaTime * rotationSpeed;
+                elbowDrive.target = elbowRotation;
+                articulation[2].xDrive = elbowDrive;
+                if (articulation[2].xDrive.target > -100)
+                {
+                    elbowRotation = -100;
+                    elbowDrive.target = elbowRotation;
+                    articulation[2].xDrive = elbowDrive;
+                }
+            }
+        }
+        if (articulation[3].xDrive.target != 70)
+        {
+            if (articulation[3].xDrive.target > 70)
+            {
+                wrist01Rotation -= Time.deltaTime * rotationSpeed;
+                wrist01Drive.target = wrist01Rotation;
+                articulation[3].xDrive = wrist01Drive;
+                if (articulation[3].xDrive.target < 70)
+                {
+                    wrist01Rotation = 70;
+                    wrist01Drive.target = wrist01Rotation;
+                    articulation[3].xDrive = wrist01Drive;
+                }
+            }
+            if (articulation[3].xDrive.target < 70)
+            {
+                wrist01Rotation += Time.deltaTime * rotationSpeed;
+                wrist01Drive.target = wrist01Rotation;
+                articulation[3].xDrive = wrist01Drive;
+                if (articulation[3].xDrive.target > 70)
+                {
+                    wrist01Rotation = 70;
+                    wrist01Drive.target = wrist01Rotation;
+                    articulation[3].xDrive = wrist01Drive;
+                }
+            }
+        }
+        if (articulation[4].xDrive.target != -91.21f)
+        {
+            if (articulation[4].xDrive.target > -91.21f)
+            {
+                wrist02Rotation -= Time.deltaTime * rotationSpeed;
+                wrist02Drive.target = wrist02Rotation;
+                articulation[4].xDrive = wrist02Drive;
+                if (articulation[4].xDrive.target < -91.21f)
+                {
+                    wrist02Rotation = -91.21f;
+                    wrist02Drive.target = wrist02Rotation;
+                    articulation[4].xDrive = wrist02Drive;
+                }
+            }
+            if (articulation[4].xDrive.target < -91.21f)
+            {
+                wrist02Rotation += Time.deltaTime * rotationSpeed;
+                wrist02Drive.target = wrist02Rotation;
+                articulation[4].xDrive = wrist02Drive;
+                if (articulation[4].xDrive.target > -91.21f)
+                {
+                    wrist02Rotation = -91.21f;
+                    wrist02Drive.target = wrist02Rotation;
+                    articulation[4].xDrive = wrist02Drive;
+                }
+            }
+        }
     }
-
-    IEnumerator waitMoving()
-    {
-        motionOrder = 1;
-        yield return new WaitForSeconds(2);
-        motionOrder = 2;
-        yield return new WaitForSeconds(1);
-        motionOrder = 3;
-        yield return new WaitForSeconds(1);
-        motionOrder = 4;
-        yield return new WaitForSeconds(1);
-        motionOrder = 7;
-    }
-
 }

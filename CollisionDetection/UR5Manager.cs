@@ -5,33 +5,35 @@ using System.Threading.Tasks;
 
 public class UR5Manager : MonoBehaviour
 {
-    private GameObject getRobot;
+    private GameObject RobotArm;
     internal Transform[] collisionJoints;
     public GameObject[] robotJoints;
     public ArticulationBody[] articulation;
-    bool isInitial;
+    private bool isInitial;
+    private bool isSet;
 
     void Start()
     {
-
+        RobotArm = this.gameObject;
     }
 
     // Update is called once per frame
     async void Update()
     {
-        if (!isInitial)
+        isInitial = RobotArm.activeSelf;
+        if (isInitial && !isSet)
         {
             await initializeJoints();
-            isInitial = true;
+            isSet = true;
         }
+
     }
 
 
     // Create the list of GameObjects that represent each joint of the robot
     async Task initializeJoints()
     {
-        getRobot = this.gameObject;
-        Transform[] getJoints = getRobot.transform.GetChild(0).GetComponentsInChildren<Transform>(true);
+        Transform[] getJoints = RobotArm.transform.GetChild(0).GetComponentsInChildren<Transform>(true);
         robotJoints = new GameObject[6];
         articulation = new ArticulationBody[6];
         collisionJoints = new Transform[6];
@@ -96,10 +98,10 @@ public class UR5Manager : MonoBehaviour
                 collisionJoints[5] = getJoints[i];
             }
         }
-        //collisionJoints[1].gameObject.AddComponent<Wrist03Detection>();
-        //collisionJoints[2].gameObject.AddComponent<Wrist03Detection>();
-        //collisionJoints[3].gameObject.AddComponent<Wrist03Detection>();
-        //collisionJoints[4].gameObject.AddComponent<Wrist03Detection>();
+        collisionJoints[1].gameObject.AddComponent<ShoulderDetection>();
+        collisionJoints[2].gameObject.AddComponent<ElbowDetection>();
+        collisionJoints[3].gameObject.AddComponent<Wrist01Detection>();
+        collisionJoints[4].gameObject.AddComponent<Wrist02Detection>();
         collisionJoints[5].gameObject.AddComponent<Wrist03Detection>();
     }
 

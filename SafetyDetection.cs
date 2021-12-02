@@ -6,23 +6,25 @@ public class SafetyDetection : MonoBehaviour
 {
     public GameObject robotArm;
     private GameObject safetyReminder;
-    //private GameObject innerSafetyArea;
+    private GameObject innerSafetyArea;
     //private GameObject midSafetyArea;
     //private GameObject outterSafetyArea;
 
     public Material oldInnerLayer;
-    public Material oldMidLayer;
-    public Material oldOutterLayer;
+    //public Material oldMidLayer;
+    //public Material oldOutterLayer;
     public Material newInnerLayer;
-    public Material newMidLayer;
-    public Material newOutterLayer;
+    //public Material newMidLayer;
+    //public Material newOutterLayer;
+
+    internal float safetyDistance;
 
     void Start()
     {
         safetyReminder = this.gameObject;
-        //innerSafetyArea = this.gameObject.transform.Find("SafetyArea - inner").gameObject;
-        //midSafetyArea = this.gameObject.transform.Find("SafetyArea - mid").gameObject;
-        //outterSafetyArea = this.gameObject.transform.Find("SafetyArea - outer").gameObject;
+        innerSafetyArea = this.gameObject.transform.Find("SafetyArea - inner").gameObject;
+       // midSafetyArea = this.gameObject.transform.Find("SafetyArea - mid").gameObject;
+       // outterSafetyArea = this.gameObject.transform.Find("SafetyArea - outer").gameObject;
     }
     // Update is called once per frame
     void Update()
@@ -30,38 +32,23 @@ public class SafetyDetection : MonoBehaviour
         Vector3 robotArmPosition = robotArm.transform.position;
         safetyReminder.transform.position = robotArmPosition;
         var headPosition = Camera.main.transform.position;
-        float safetyDistance = Mathf.Abs(Vector3.Distance(robotArmPosition, headPosition));
-        /*
+        safetyDistance = Mathf.Abs(Vector3.Distance(robotArmPosition, headPosition));
+        //Debug.Log(safetyDistance);
+
         MeshRenderer inMeshRenderer = innerSafetyArea.GetComponent<MeshRenderer>();
-        MeshRenderer midMeshRenderer = midSafetyArea.GetComponent<MeshRenderer>();
-        MeshRenderer outMeshRenderer = outterSafetyArea.GetComponent<MeshRenderer>();
-        if (safetyDistance <= 2.5f)
+        //MeshRenderer midMeshRenderer = midSafetyArea.GetComponent<MeshRenderer>();
+        //MeshRenderer outMeshRenderer = outterSafetyArea.GetComponent<MeshRenderer>();
+        if(safetyDistance > 2f)
         {
-            inMeshRenderer.enabled = true;
-            midMeshRenderer.enabled = true;
-            outMeshRenderer.enabled = true;
             inMeshRenderer.material = oldInnerLayer;
-            midMeshRenderer.material = oldMidLayer;
-            outMeshRenderer.material = oldOutterLayer;
-            if (safetyDistance <= 2)
-            {
-                midMeshRenderer.material = newMidLayer;
-                outMeshRenderer.material = newOutterLayer;
-                if (safetyDistance <= 1.5f)
-                {
-                    inMeshRenderer.material = newInnerLayer;
-                    midMeshRenderer.material = oldMidLayer;
-                    outMeshRenderer.material = newOutterLayer;
-                }
-            }
         }
-        else
+        if (safetyDistance <= 2f)
         {
-            inMeshRenderer.enabled = false;
-            midMeshRenderer.enabled = false;
-            outMeshRenderer.enabled = false;
+            inMeshRenderer.material = newInnerLayer;
+
         }
-        */
-        //TextMessage.Instance.ChangeTextMessage(string.Format("SafetyDistance :\n {0}", safetyDistance >= 1.0f ? safetyDistance.ToString("####0.0") + "m" : safetyDistance.ToString("0.00") + "cm"));
+
+
+        TextMessage.Instance.ChangeTextMessage(string.Format("SafetyDistance :\n {0}", safetyDistance >= 1.0f ? safetyDistance.ToString("####0.0") + "m" : safetyDistance.ToString("0.00") + "cm"));
     }
 }

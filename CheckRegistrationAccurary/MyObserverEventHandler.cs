@@ -187,5 +187,6 @@ public class MyObserverEventHandler : MonoBehaviour
     void Update()
     {
         TrackObjectPosition = mObserverBehaviour.transform.position;
+        Debug.Log(mObserverBehaviour.gameObject.tag);
     }
 }

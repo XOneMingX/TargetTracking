@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEditor;
 
-public class ShoulderDetection : MonoBehaviour
+public class TriggerDetection : MonoBehaviour
 {
     private UR5Manager uR5Manager;
-    internal bool isShoulderTouch;
+    internal bool isTrigger;
     public Material originalColor;
 
     private Transform getRobot;
@@ -18,7 +18,7 @@ public class ShoulderDetection : MonoBehaviour
 
     void Awake()
     {
-        uR5Manager = this.gameObject.GetComponentInParent<UR5Manager>();
+        uR5Manager = GameObject.FindObjectOfType<UR5Manager>();
     }
 
     void Start()
@@ -27,11 +27,11 @@ public class ShoulderDetection : MonoBehaviour
 
     }
 
-    async void Update()
+    void Update()
     {
         if (!isGetJoints)
         {
-            await ListJoints();
+            ListJoints();
             isGetJoints = true;
         }
     }
@@ -39,14 +39,15 @@ public class ShoulderDetection : MonoBehaviour
     void OnTriggerEnter(Collider collision)
     {
         bool isExist = false;
+        Debug.Log(collision.transform);
         if (allJoints.Contains(collision.transform))
         {
             isExist = true;
-            isShoulderTouch = false;
+            isTrigger = false;
         }
         if (!isExist)
         {
-            isShoulderTouch = true;
+            isTrigger = true;
             this.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
         }
     }
@@ -55,7 +56,7 @@ public class ShoulderDetection : MonoBehaviour
     {
         MeshRenderer JointsRenderer = this.gameObject.GetComponent<MeshRenderer>();
         JointsRenderer.material = originalColor;
-        isShoulderTouch = false;
+        isTrigger = false;
     }
 
     async Task ListJoints()
@@ -70,4 +71,3 @@ public class ShoulderDetection : MonoBehaviour
         allJoints = new List<Transform>(getJoints);
     }
 }
-

@@ -18,13 +18,13 @@ public class Wrist01Detection : MonoBehaviour
 
     void Awake()
     {
-        uR5Manager = GameObject.FindObjectOfType<UR5Manager>();
+        uR5Manager = this.gameObject.GetComponentInParent<UR5Manager>();
     }
 
     void Start()
     {
         originalColor = Resources.Load<Material>("Joint");
-        getJoints = uR5Manager.collisionJoints;
+
     }
 
     async void Update()
@@ -32,14 +32,13 @@ public class Wrist01Detection : MonoBehaviour
         if (!isGetJoints)
         {
             await ListJoints();
-            //isGetJoints = true;
+            isGetJoints = true;
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         bool isExist = false;
-        Debug.Log(collision.transform);
         if (allJoints.Contains(collision.transform))
         {
             isExist = true;
@@ -52,14 +51,22 @@ public class Wrist01Detection : MonoBehaviour
         }
     }
 
-    void OnCollisionExit(Collision collision)
+    void OnTriggerExit(Collider collision)
     {
         MeshRenderer JointsRenderer = this.gameObject.GetComponent<MeshRenderer>();
         JointsRenderer.material = originalColor;
+        isWrist01Touch = false;
     }
 
     async Task ListJoints()
     {
+        await Task.Run(() =>
+        {
+            if (getJoints == null)
+            {
+                getJoints = uR5Manager.collisionJoints;
+            }
+        });
         allJoints = new List<Transform>(getJoints);
     }
 }
