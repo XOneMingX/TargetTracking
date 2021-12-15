@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using TMPro;
 
 public class ConnectServer : MonoBehaviour
 {
@@ -23,12 +24,16 @@ public class ConnectServer : MonoBehaviour
     int recvLen; // the length of received message
     Thread connectThread; // connection thread
 
+    public TMP_InputField GetIP;
+    public TMP_InputField GetPort;
+    string IPaddress;
+    int PortNum;
 
     void InitSocket()
     {
         // define the IP and port of the server. The port corresponds to the server
-        ip = IPAddress.Parse("127.0.0.1"); // can be a LAN or Internet IP, in this case local
-        ipEnd = new IPEndPoint(ip, 65432);
+        ip = IPAddress.Parse(IPaddress); // can be a LAN or Internet IP, in this case local
+        ipEnd = new IPEndPoint(ip, PortNum);
 
         // start a thread connection, necessary, otherwise the main thread is stuck
         connectThread = new Thread(new ThreadStart(SocketReceive));
@@ -88,6 +93,15 @@ public class ConnectServer : MonoBehaviour
 
     public void StartConnect()
     {
+        IPaddress = GetIP.text;
+        PortNum = int.Parse(GetPort.text);
+        InitSocket(); // activate the connection
+    }
+
+    public void DefaultConnect()
+    {
+        IPaddress = "127.0.0.1";
+        PortNum = 65432;
         InitSocket(); // activate the connection
     }
 
@@ -95,4 +109,5 @@ public class ConnectServer : MonoBehaviour
     {
         SocketQuit(); // when the program exits, the connection is closed
     }
+
 }
