@@ -98,11 +98,12 @@ public class UR5Manager : MonoBehaviour
                 collisionJoints[5] = getJoints[i];
             }
         }
-        collisionJoints[1].gameObject.AddComponent<ShoulderDetection>();
-        collisionJoints[2].gameObject.AddComponent<ElbowDetection>();
-        collisionJoints[3].gameObject.AddComponent<Wrist01Detection>();
-        collisionJoints[4].gameObject.AddComponent<Wrist02Detection>();
-        collisionJoints[5].gameObject.AddComponent<Wrist03Detection>();
+        //collisionJoints[1].gameObject.AddComponent<ShoulderDetection>();
+        //collisionJoints[2].gameObject.AddComponent<ElbowDetection>();
+        //collisionJoints[3].gameObject.AddComponent<Wrist01Detection>();
+        //collisionJoints[4].gameObject.AddComponent<Wrist02Detection>();
+        //collisionJoints[5].gameObject.AddComponent<Wrist03Detection>();
+        collisionJoints[5].gameObject.AddComponent<TriggerDetection>();
     }
 
 }

@@ -37,7 +37,7 @@ public class MoveWithCollision : MonoBehaviour
     void Update()
     {
         triggerDetection = GameObject.FindObjectOfType<TriggerDetection>();
-  
+
         if (motionOrder == 1)
         {
             movement_Up1();
@@ -60,7 +60,7 @@ public class MoveWithCollision : MonoBehaviour
         }
         if (motionOrder == 6)
         {
-            movement_Center();
+            movement_Around();
         }
     }
 
@@ -999,6 +999,26 @@ public class MoveWithCollision : MonoBehaviour
                     articulation[4].xDrive = wrist02Drive;
                 }
             }
+        }
+    }
+
+    void movement_Around()
+    {
+        var baseDrive = articulation[0].xDrive;
+        var shoudlerDrive = articulation[1].xDrive;
+        var elbowDrive = articulation[2].xDrive;
+        var wrist01Drive = articulation[3].xDrive;
+        var wrist02Drive = articulation[4].xDrive;
+        if (triggerDetection.isTrigger == true)
+        {
+            baseDrive.target = baseRotation;
+            articulation[0].xDrive = baseDrive;
+        }
+        if (triggerDetection.isTrigger == false)
+        {
+            baseRotation -= Time.deltaTime * rotationSpeed;
+            baseDrive.target = baseRotation;
+            articulation[0].xDrive = baseDrive;
         }
     }
 }

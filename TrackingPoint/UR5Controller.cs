@@ -461,7 +461,7 @@ public class UR5Controller : MonoBehaviour
                 jointList[j].transform.localEulerAngles = currentRotation;
                 fJointsValue[j] = currentRotation.z;
                 sJointsValue[j] = fJointsValue[j].ToString();
-                /*
+                
                 if (TargetDistance < 0.035f && !isPass)
                 {
                     controlCube.GetComponent<Renderer>().material.color = Color.green;
@@ -471,7 +471,7 @@ public class UR5Controller : MonoBehaviour
                     client.SocketSend(editString);
                     isPass = true;
                 }
-                */
+                
             }
 
             counter++;
@@ -480,7 +480,7 @@ public class UR5Controller : MonoBehaviour
 
     void LimitBlock()
     {
-        float radius = 0.8f;
+        float radius = 0.7f;
         float distance = Vector3.Distance(controlCube.transform.position, RobotBase.transform.position);
         if(distance > radius)
         {
