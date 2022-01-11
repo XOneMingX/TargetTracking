@@ -36,8 +36,10 @@ public class MoveWithCollision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Keep checking the collision is happened or not
         triggerDetection = GameObject.FindObjectOfType<TriggerDetection>();
 
+        //Set different robot pose
         if (motionOrder == 1)
         {
             movement_Up1();
@@ -66,6 +68,7 @@ public class MoveWithCollision : MonoBehaviour
 
     void initializeJoints()
     {
+        //Register all joints of UR5 model & the articulation body of each joint
         getRobot = this.gameObject;
         Transform[] getJoints = getRobot.transform.GetChild(0).GetComponentsInChildren<Transform>(true);
         robotJoints = new GameObject[6];
@@ -107,7 +110,7 @@ public class MoveWithCollision : MonoBehaviour
     }
 
 
-
+    //Call different robot pose
     public void rotateMotion_up1()
     {
 
@@ -139,7 +142,7 @@ public class MoveWithCollision : MonoBehaviour
         motionOrder = 6;
     }
 
-
+    //Set the required value for each joint
     void movement_Up1()
     {
         var baseDrive = articulation[0].xDrive;
@@ -1002,6 +1005,7 @@ public class MoveWithCollision : MonoBehaviour
         }
     }
 
+    //Keep moving and test the collision is work or not
     void movement_Around()
     {
         var baseDrive = articulation[0].xDrive;

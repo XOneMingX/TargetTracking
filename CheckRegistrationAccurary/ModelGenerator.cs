@@ -51,7 +51,7 @@ public class ModelGenerator : MonoBehaviour
         Vector3 GenModelTransform = oModelTransform[0];
         Vector3 GenModelRotation = oModelRotation[0];
         modelTargets[0].gModelTarget.transform.position = GenModelTransform;
-        modelTargets[0].gModelTarget.transform.eulerAngles = new Vector3(0, GenModelRotation.y + 90f, 90);
+        modelTargets[0].gModelTarget.transform.eulerAngles = new Vector3(GenModelRotation.x, GenModelRotation.y - GenModelRotation.y, GenModelRotation.z);
         modelTargets[0].gModelTarget.SetActive(true);
 
         //Create the new robot nearby
@@ -60,7 +60,7 @@ public class ModelGenerator : MonoBehaviour
         //Robot1.SetActive(true);
 
         /*
-        //Generate the good-lokking robot
+        //Generate the good-looking robot
         oModelTransform[0] = modelTargets[0].oModelTarget.transform.position;
         oModelRotation[0] = modelTargets[0].oModelTarget.transform.rotation;
         Vector3 GenModelTransform = oModelTransform[0];
@@ -73,6 +73,7 @@ public class ModelGenerator : MonoBehaviour
 
 }
 /*
+    // Used to generate multiple object in once
     void GenerateModelTargets()
     {
         for (int i = 0; i < modelTargets.Length; i++)
@@ -86,9 +87,9 @@ public class ModelGenerator : MonoBehaviour
             modelTargets[i].gModelTarget.SetActive(true);
         }
     }
+public void GenerateRobotArm()
+{
+    GeneratedObject.transform.position = TrackedObjectPosition;
+    GeneratedObject.SetActive(true);
+}
  */
-    //public void GenerateRobotArm()
-    //{
-    //    GeneratedObject.transform.position = TrackedObjectPosition;
-    //    GeneratedObject.SetActive(true);
-    //}

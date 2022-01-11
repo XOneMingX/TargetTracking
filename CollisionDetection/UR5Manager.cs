@@ -20,19 +20,23 @@ public class UR5Manager : MonoBehaviour
     // Update is called once per frame
     async void Update()
     {
-        isInitial = RobotArm.activeSelf;
+        //Confirm the GameObject robot arm is active
+        //Then, activate the initializeJoints method
+        isInitial = RobotArm.activeSelf; 
         if (isInitial && !isSet)
         {
             await initializeJoints();
             isSet = true;
         }
-
     }
 
 
     // Create the list of GameObjects that represent each joint of the robot
     async Task initializeJoints()
     {
+        //Register all joints of UR5 model & the articulation body of each joint
+        //Register the joints which are used for detecting the collision
+        //Add the detector script in the corresponding collision-joints
         Transform[] getJoints = RobotArm.transform.GetChild(0).GetComponentsInChildren<Transform>(true);
         robotJoints = new GameObject[6];
         articulation = new ArticulationBody[6];

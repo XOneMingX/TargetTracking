@@ -407,11 +407,12 @@ public class UR5Controller : MonoBehaviour
     void TrackingPoint()
     {
         var objectManipulator = controlCube.GetComponent<ObjectManipulator>();
+        Debug.Log(client.recvStr);
         if (client.recvStr != null)
         {
             isPass = false;
-            client.recvStr = null;
             objectManipulator.enabled = true;
+            client.recvStr = null;
         }
 
         if (userHasHitOk)
@@ -434,8 +435,6 @@ public class UR5Controller : MonoBehaviour
             floatPsi = controlCube.transform.eulerAngles.z;
             
             float TargetDistance = Vector3.Distance(EndEffector.transform.position, controlCube.transform.position);
-
-            Debug.Log(TargetDistance);
 
             if (TargetDistance < 0.035f)
             {
@@ -464,7 +463,6 @@ public class UR5Controller : MonoBehaviour
                 
                 if (TargetDistance < 0.035f && !isPass)
                 {
-                    controlCube.GetComponent<Renderer>().material.color = Color.green;
 
                     objectManipulator.enabled = false;
                     editString = sJointsValue[0] + "," + sJointsValue[1] + "," + sJointsValue[2] + "," + sJointsValue[3] + "," + sJointsValue[4] + "," + sJointsValue[5] + "\n";
