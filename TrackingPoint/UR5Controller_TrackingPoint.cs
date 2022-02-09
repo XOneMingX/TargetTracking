@@ -335,6 +335,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     private string[] sJointsValue = new string[6];
     public GameObject EndEffector;
     bool isPass = false;
+    bool isInitial = false;
 
     private ConnectServer client;
     private string editString;
@@ -363,6 +364,11 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
         {
             TrackingBlock = GameObject.Find("Block");
         }
+        if(isInitial == false)
+        {
+            initializeBlock();
+        }
+
         TrackingPoint();
         LimitBlock();
         //controlCube.transform.position = new Vector3(floatX, floatY, floatZ);
@@ -417,7 +423,6 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     void TrackingPoint()
     {
         var objectManipulator = TrackingBlock.GetComponent<ObjectManipulator>();
-        Debug.Log(client.recvStr);
         if (client.recvStr != null)
         {
             isPass = false;
@@ -453,14 +458,12 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
 
 
             float TargetDistance = Vector3.Distance(EndEffector.transform.position, TrackingBlock.transform.position);
-            Debug.Log(TargetDistance);
             x = oldX + (counter * (controlCube.transform.position.x - oldX) / frameCount);
             y = oldY + (counter * (controlCube.transform.position.y - oldY) / frameCount);
             z = oldZ + (counter * (controlCube.transform.position.z - oldZ) / frameCount);
             phi = controlCube.transform.eulerAngles.x * Mathf.Deg2Rad;
             theta = controlCube.transform.eulerAngles.y * Mathf.Deg2Rad;
             psi = controlCube.transform.eulerAngles.z * Mathf.Deg2Rad;
-            //Debug.Log("psi = " + x);
 
             Robot11.Solve(x, y, z, phi, theta, psi);
 
@@ -483,7 +486,6 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
             if (TargetDistance < 0.04f)
             {
                 counter = 1;
-                //controlCube.GetComponent<Renderer>().material.color = Color.green;
                 userHasHitOk = false;
             }
 
@@ -533,10 +535,11 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     // Create the list of GameObjects that represent each joint of the robot
     public void initializeBlock()
     {
-        TrackingBlock.transform.position = new Vector3(RobotBase.transform.position.x, RobotBase.transform.position.y + 0.5f, RobotBase.transform.position.z - 0.5f);
+        TrackingBlock.transform.position = new Vector3(RobotBase.transform.position.x, RobotBase.transform.position.y + 0.3f, RobotBase.transform.position.z - 0.5f);
+        controlCube.transform.position = new Vector3(RobotBase.transform.position.x, RobotBase.transform.position.y + 0.3f, RobotBase.transform.position.z - 0.5f);
 
-        controlCube.transform.position = new Vector3(floatX, floatY, floatZ);
-        controlCube.transform.eulerAngles = new Vector3(floatPhi, floatTheta, floatPsi);
+        //controlCube.transform.position = new Vector3(floatX, floatY, floatZ);
+        //controlCube.transform.eulerAngles = new Vector3(floatPhi, floatTheta, floatPsi);
 
         oldX = x;
         oldY = y;
@@ -559,13 +562,14 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
         floatTheta = PointRotaY;
         floatPsi = PointRotaZ;
 
-        x = oldX + (counter * (controlCube.transform.position.x - oldX) / frameCount);
-        y = oldY + (counter * (controlCube.transform.position.y - oldY) / frameCount);
-        z = oldZ + (counter * (controlCube.transform.position.z - oldZ) / frameCount);
+        float TargetDistance = Vector3.Distance(EndEffector.transform.position, TrackingBlock.transform.position);
+
+        x = oldX + (counter * (controlCube.transform.position.x - oldX) / 20);
+        y = oldY + (counter * (controlCube.transform.position.y - oldY) / 20);
+        z = oldZ + (counter * (controlCube.transform.position.z - oldZ) / 20);
         phi = controlCube.transform.eulerAngles.x * Mathf.Deg2Rad;
         theta = controlCube.transform.eulerAngles.y * Mathf.Deg2Rad;
         psi = controlCube.transform.eulerAngles.z * Mathf.Deg2Rad;
-        //Debug.Log("psi = " + x);
 
         Robot11.Solve(x, y, z, phi, theta, psi);
 
@@ -575,7 +579,14 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
             currentRotation.z = Robot11.solutionArray[j];
             jointList[j].transform.localEulerAngles = currentRotation;
         }
+
+        if (TargetDistance < 0.04f)
+        {
+            counter = 1;
+            isInitial = true;
+        }
     }
+
     void initializeJoints()
     {
         var RobotChildren = RobotBase.GetComponentsInChildren<Transform>();
@@ -584,40 +595,40 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
             if (RobotChildren[i].name == "Base")
             {
                 jointList[0] = RobotChildren[i].gameObject;
-                Vector3 currentRotation = jointList[0].transform.localEulerAngles;
-                currentRotation.z = RobotBase.transform.eulerAngles.y - 80;
-                jointList[0].transform.localEulerAngles = currentRotation;
+                //Vector3 currentRotation = jointList[0].transform.localEulerAngles;
+                //currentRotation.z = RobotBase.transform.eulerAngles.y - 80;
+                //jointList[0].transform.localEulerAngles = currentRotation;
             }
             else if (RobotChildren[i].name == "Shoulder")
             {
                 jointList[1] = RobotChildren[i].gameObject;
-                Vector3 currentRotation = jointList[1].transform.localEulerAngles;
-                currentRotation.z = -110;
-                jointList[1].transform.localEulerAngles = currentRotation;
+                ////Vector3 currentRotation = jointList[1].transform.localEulerAngles;
+                ////currentRotation.z = -110;
+                ////jointList[1].transform.localEulerAngles = currentRotation;
                 //jointList[1].transform.rotation.z = -100;
             }
             else if (RobotChildren[i].name == "Elbow")
             {
                 jointList[2] = RobotChildren[i].gameObject;
-                Vector3 currentRotation = jointList[2].transform.localEulerAngles;
-                currentRotation.z = 90;
-                jointList[2].transform.localEulerAngles = currentRotation;
+                //Vector3 currentRotation = jointList[2].transform.localEulerAngles;
+                //currentRotation.z = 90;
+                //jointList[2].transform.localEulerAngles = currentRotation;
                 //jointList[2].transform.rotation.z = 80;
             }
             else if (RobotChildren[i].name == "Wrist01")
             {
                 jointList[3] = RobotChildren[i].gameObject;
-                Vector3 currentRotation = jointList[3].transform.localEulerAngles;
-                currentRotation.z = -90;
-                jointList[3].transform.localEulerAngles = currentRotation;
+                //Vector3 currentRotation = jointList[3].transform.localEulerAngles;
+                //currentRotation.z = -90;
+                //jointList[3].transform.localEulerAngles = currentRotation;
                 //jointList[3].transform.rotation.z = -90;
             }
             else if (RobotChildren[i].name == "Wrist02")
             {
                 jointList[4] = RobotChildren[i].gameObject;
-                Vector3 currentRotation = jointList[4].transform.localEulerAngles;
-                currentRotation.z = 90;
-                jointList[4].transform.localEulerAngles = currentRotation;
+                //Vector3 currentRotation = jointList[4].transform.localEulerAngles;
+                //currentRotation.z = 90;
+                //jointList[4].transform.localEulerAngles = currentRotation;
                 //jointList[4].transform.rotation.z = 90;
             }
             else if (RobotChildren[i].name == "Wrist03")
