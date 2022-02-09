@@ -49,6 +49,6 @@ public class SafetyDetection : MonoBehaviour
         }
 
 
-        TextMessage.Instance.ChangeTextMessage(string.Format("SafetyDistance :\n {0}", safetyDistance >= 1.0f ? safetyDistance.ToString("####0.0") + "m" : safetyDistance.ToString("0.00") + "cm"));
+        SafetyDistance.Instance.ChangeTextMessage(string.Format("SafetyDistance :\n {0}", safetyDistance >= 1.0f ? safetyDistance.ToString("####0.0") + "m" : safetyDistance.ToString("0.00") + "cm"));
     }
 }

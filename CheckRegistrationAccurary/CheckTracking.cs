@@ -26,7 +26,7 @@ public class CheckTracking : MonoBehaviour
         //Calculate the distance between the tracked object and generated object, and then display the distance in the panel
         Vector3 GeneratedObjectPosition = GeneratedObject.transform.position;
         float matchDistance = Mathf.Abs(Vector3.Distance(TrackedRealObject, GeneratedObjectPosition));
-        TextMessage.Instance.ChangeTextMessage(string.Format("matchDistance :\n {0}", matchDistance >= 1.0f ? matchDistance.ToString("####0.0") + "m" : matchDistance.ToString("0.00") + "m"));
+        SafetyDistance.Instance.ChangeTextMessage(string.Format("matchDistance :\n {0}", matchDistance >= 1.0f ? matchDistance.ToString("####0.0") + "m" : matchDistance.ToString("0.00") + "m"));
     }
 
     public void DisplayBoard()

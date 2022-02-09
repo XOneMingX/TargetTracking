@@ -17,6 +17,7 @@ public class ModelGenerator : MonoBehaviour
     private Vector3[] gModelTransform;
     private Vector3[] gModelRotation;
 
+    //public GameObject Robot1; //For collision test
 
     //private GameObject GeneratedObject;
     //private MyObserverEventHandler myObserverEventHandler;
@@ -44,8 +45,7 @@ public class ModelGenerator : MonoBehaviour
 
     public void GenerateRobotArm()
     {
-
-        //Generate the collision-used robot
+        //Generate the collision-used or tracking-used robot
         oModelTransform[0] = modelTargets[0].oModelTarget.transform.position;
         oModelRotation[0] = modelTargets[0].oModelTarget.transform.eulerAngles;
         Vector3 GenModelTransform = oModelTransform[0];
@@ -54,19 +54,19 @@ public class ModelGenerator : MonoBehaviour
         modelTargets[0].gModelTarget.transform.eulerAngles = new Vector3(GenModelRotation.x, GenModelRotation.y - GenModelRotation.y, GenModelRotation.z);
         modelTargets[0].gModelTarget.SetActive(true);
 
-        //Create the new robot nearby
-        //Robot1.transform.position = new Vector3(GenModelTransform.x, GenModelTransform.y, GenModelTransform.z + 0.4f);
-        //Robot1.transform.eulerAngles = new Vector3(GenModelRotation.x, GenModelRotation.y + 90f, GenModelRotation.z);
-        //Robot1.SetActive(true);
-
         /*
-        //Generate the good-looking robot
+        //Create the new robot nearby
+        Robot1.transform.position = new Vector3(GenModelTransform.x, GenModelTransform.y, GenModelTransform.z + 0.4f);
+        Robot1.transform.eulerAngles = new Vector3(GenModelRotation.x, GenModelRotation.y + 90f, GenModelRotation.z);
+        Robot1.SetActive(true);
+
+                //Generate the good-looking robot
         oModelTransform[0] = modelTargets[0].oModelTarget.transform.position;
-        oModelRotation[0] = modelTargets[0].oModelTarget.transform.rotation;
+        oModelRotation[0] = modelTargets[0].oModelTarget.transform.eulerAngles;
         Vector3 GenModelTransform = oModelTransform[0];
-        Quaternion GenModelRotation = oModelRotation[0];
+        Vector3 GenModelRotation = oModelRotation[0];
         modelTargets[0].gModelTarget.transform.position = GenModelTransform;
-        modelTargets[0].gModelTarget.transform.rotation = GenModelRotation;
+        modelTargets[0].gModelTarget.transform.eulerAngles = new Vector3(GenModelRotation.x, GenModelRotation.y, GenModelRotation.z);
         modelTargets[0].gModelTarget.SetActive(true);
         */
     }
