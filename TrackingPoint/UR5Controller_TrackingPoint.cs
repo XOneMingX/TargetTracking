@@ -564,9 +564,9 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
 
         float TargetDistance = Vector3.Distance(EndEffector.transform.position, TrackingBlock.transform.position);
 
-        x = oldX + (counter * (controlCube.transform.position.x - oldX) / 20);
-        y = oldY + (counter * (controlCube.transform.position.y - oldY) / 20);
-        z = oldZ + (counter * (controlCube.transform.position.z - oldZ) / 20);
+        x = oldX + (counter * (floatX - oldX) / 30);
+        y = oldY + (counter * (floatY - oldY) / 30);
+        z = oldZ + (counter * (floatZ - oldZ) / 30);
         phi = controlCube.transform.eulerAngles.x * Mathf.Deg2Rad;
         theta = controlCube.transform.eulerAngles.y * Mathf.Deg2Rad;
         psi = controlCube.transform.eulerAngles.z * Mathf.Deg2Rad;
