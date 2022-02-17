@@ -305,7 +305,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     public GameObject RobotBase;
     public GameObject controlCube;
     private GameObject TrackingBlock;
-  
+
     public float x = 0, y = 6, z = 3, phi = 0, theta = 0, psi = 0, oldX, oldY, oldZ, oldPhi, oldTheta, oldPsi;
     public string stringX, stringY, stringZ, stringPhi, stringTheta, stringPsi;
     public bool userHasHitOk = false;
@@ -355,19 +355,25 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if(controlCube == null)
+        if(RobotBase.activeSelf == true)
         {
-            controlCube = GameObject.Find("Target");
-            initializeCube();
+            if (TrackingBlock == null)
+            {
+                TrackingBlock = GameObject.Find("Block");
+            }
+            if (controlCube == null)
+            {
+                controlCube = GameObject.Find("Target");
+                initializeCube();
+            }
+            if (isInitial == false)
+            {
+                initializeBlock();
+            }
         }
-        if(TrackingBlock == null)
-        {
-            TrackingBlock = GameObject.Find("Block");
-        }
-        if(isInitial == false)
-        {
-            initializeBlock();
-        }
+
+
+
 
         TrackingPoint();
         LimitBlock();
@@ -481,7 +487,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
                     client.SocketSend(editString);
                     isPass = true;
                 }
-                
+
             }
             if (TargetDistance < 0.04f)
             {
@@ -497,7 +503,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     {
         float radius = 0.7f;
         float distance = Vector3.Distance(TrackingBlock.transform.position, RobotBase.transform.position);
-        if(distance > radius)
+        if (distance > radius)
         {
             Vector3 fromOriginToObject = TrackingBlock.transform.position - RobotBase.transform.position;
             fromOriginToObject *= radius / distance;
@@ -564,9 +570,9 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
 
         float TargetDistance = Vector3.Distance(EndEffector.transform.position, TrackingBlock.transform.position);
 
-        x = oldX + (counter * (floatX - oldX) / 30);
-        y = oldY + (counter * (floatY - oldY) / 30);
-        z = oldZ + (counter * (floatZ - oldZ) / 30);
+        x = oldX + (counter * (floatX - oldX) / 20);
+        y = oldY + (counter * (floatY - oldY) / 20);
+        z = oldZ + (counter * (floatZ - oldZ) / 20);
         phi = controlCube.transform.eulerAngles.x * Mathf.Deg2Rad;
         theta = controlCube.transform.eulerAngles.y * Mathf.Deg2Rad;
         psi = controlCube.transform.eulerAngles.z * Mathf.Deg2Rad;
@@ -639,4 +645,3 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
         }
     }
 }
-
