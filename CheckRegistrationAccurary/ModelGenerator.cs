@@ -51,7 +51,7 @@ public class ModelGenerator : MonoBehaviour
         Vector3 GenModelTransform = oModelTransform[0];
         Vector3 GenModelRotation = oModelRotation[0];
         modelTargets[0].gModelTarget.transform.position = GenModelTransform;
-        modelTargets[0].gModelTarget.transform.eulerAngles = new Vector3(GenModelRotation.x, GenModelRotation.y - GenModelRotation.y, GenModelRotation.z);
+        modelTargets[0].gModelTarget.transform.eulerAngles = new Vector3(0, GenModelRotation.y - GenModelRotation.y, 90);
         modelTargets[0].gModelTarget.SetActive(true);
 
         /*

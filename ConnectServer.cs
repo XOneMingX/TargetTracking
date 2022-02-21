@@ -99,7 +99,7 @@ public class ConnectServer : MonoBehaviour
 
     public void DefaultConnect()
     {
-        IPaddress = "192.168.31.199";
+        IPaddress = "127.0.0.1";
         PortNum = 65432;
         InitSocket(); // activate the connection
     }

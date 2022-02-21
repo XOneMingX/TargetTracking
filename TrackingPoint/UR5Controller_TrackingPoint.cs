@@ -305,7 +305,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     public GameObject RobotBase;
     public GameObject controlCube;
     private GameObject TrackingBlock;
-
+  
     public float x = 0, y = 6, z = 3, phi = 0, theta = 0, psi = 0, oldX, oldY, oldZ, oldPhi, oldTheta, oldPsi;
     public string stringX, stringY, stringZ, stringPhi, stringTheta, stringPsi;
     public bool userHasHitOk = false;
@@ -313,7 +313,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     private int counter = 1;
     private int frameCount = 80;
     private float floatX, floatY, floatZ, floatPhi, floatTheta, floatPsi;
-    private GameObject[] jointList = new GameObject[6];
+    internal GameObject[] jointList = new GameObject[6];
     private UR5_Solver Robot1 = new UR5_Solver();
     private UR5_Solver Robot11
     {
@@ -340,6 +340,8 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     private ConnectServer client;
     private string editString;
 
+    private float baseOffset = 0;
+
     void Awake()
     {
         //listPoints = GameObject.FindObjectOfType<ListPoints>();
@@ -355,28 +357,25 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if(RobotBase.activeSelf == true)
+        if (RobotBase.activeSelf)
         {
-            if (TrackingBlock == null)
-            {
-                TrackingBlock = GameObject.Find("Block");
-            }
             if (controlCube == null)
             {
                 controlCube = GameObject.Find("Target");
                 initializeCube();
             }
+            if (TrackingBlock == null)
+            {
+                TrackingBlock = GameObject.Find("Block");
+            }
             if (isInitial == false)
             {
                 initializeBlock();
             }
+
+            TrackingPoint();
+            LimitBlock();
         }
-
-
-
-
-        TrackingPoint();
-        LimitBlock();
         //controlCube.transform.position = new Vector3(floatX, floatY, floatZ);
         //controlCube.transform.eulerAngles = new Vector3(floatPhi, floatTheta, floatPsi);
 
@@ -479,6 +478,10 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
                 currentRotation.z = Robot11.solutionArray[j];
                 jointList[j].transform.localEulerAngles = currentRotation;
                 fJointsValue[j] = currentRotation.z;
+                if (baseOffset != 0)
+                {
+                    fJointsValue[0] += baseOffset * -1;
+                }
                 sJointsValue[j] = fJointsValue[j].ToString();
                 if (TargetDistance < 0.04f && !isPass)
                 {
@@ -487,7 +490,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
                     client.SocketSend(editString);
                     isPass = true;
                 }
-
+                
             }
             if (TargetDistance < 0.04f)
             {
@@ -503,7 +506,7 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     {
         float radius = 0.7f;
         float distance = Vector3.Distance(TrackingBlock.transform.position, RobotBase.transform.position);
-        if (distance > radius)
+        if(distance > radius)
         {
             Vector3 fromOriginToObject = TrackingBlock.transform.position - RobotBase.transform.position;
             fromOriginToObject *= radius / distance;
@@ -570,9 +573,9 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
 
         float TargetDistance = Vector3.Distance(EndEffector.transform.position, TrackingBlock.transform.position);
 
-        x = oldX + (counter * (floatX - oldX) / 20);
-        y = oldY + (counter * (floatY - oldY) / 20);
-        z = oldZ + (counter * (floatZ - oldZ) / 20);
+        x = oldX + (counter * (floatX - oldX) / 30);
+        y = oldY + (counter * (floatY - oldY) / 30);
+        z = oldZ + (counter * (floatZ - oldZ) / 30);
         phi = controlCube.transform.eulerAngles.x * Mathf.Deg2Rad;
         theta = controlCube.transform.eulerAngles.y * Mathf.Deg2Rad;
         psi = controlCube.transform.eulerAngles.z * Mathf.Deg2Rad;
@@ -644,4 +647,16 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
             }
         }
     }
+
+    internal void AdjustJointOffset(float offset)
+    {
+        if(jointList != null)
+        {
+            baseOffset = offset;
+            Vector3 currentRotation = jointList[0].transform.localEulerAngles;
+            currentRotation.z += offset;
+            jointList[0].transform.localEulerAngles = currentRotation;
+        }
+    }
 }
+
