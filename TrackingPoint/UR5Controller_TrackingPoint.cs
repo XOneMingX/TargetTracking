@@ -544,8 +544,8 @@ public class UR5Controller_TrackingPoint : MonoBehaviour
     // Create the list of GameObjects that represent each joint of the robot
     public void initializeBlock()
     {
-        TrackingBlock.transform.position = new Vector3(RobotBase.transform.position.x, RobotBase.transform.position.y + 0.3f, RobotBase.transform.position.z - 0.5f);
-        controlCube.transform.position = new Vector3(RobotBase.transform.position.x, RobotBase.transform.position.y + 0.3f, RobotBase.transform.position.z - 0.5f);
+        TrackingBlock.transform.position = new Vector3(RobotBase.transform.position.x, RobotBase.transform.position.y + 0.3f, RobotBase.transform.position.z + 0.5f);
+        controlCube.transform.position = new Vector3(RobotBase.transform.position.x, RobotBase.transform.position.y + 0.3f, RobotBase.transform.position.z + 0.5f);
 
         //controlCube.transform.position = new Vector3(floatX, floatY, floatZ);
         //controlCube.transform.eulerAngles = new Vector3(floatPhi, floatTheta, floatPsi);
